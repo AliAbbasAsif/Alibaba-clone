@@ -1,13 +1,14 @@
 import './App.css';
-import { AppBar, Card, CardContent, CardMedia, Chip, Grid, TextField, ToggleButtonGroup, Typography } from '@mui/material';
+import { AppBar, Card, CardContent, CardMedia, Chip, Grid, TextField, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
 import { Box } from '@mui/system';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Data from './carddata';
 
 
 function App() {
 
   const [Txt, setTxt] = useState("");
+
   const searchtxt = (e) => {
     setTxt(e.taget.value);
   }
@@ -17,7 +18,16 @@ function App() {
       item[key].toString().toLowerCase().includes(Txt.toString().toLowerCase())
     )
   })
-  
+  const [filteredlist, setfilteredlist] = useState([]);
+  let catd = () => {
+    let li = Data.map((x) => x.category);
+    li = [...new Set([...li])];
+    setfilteredlist([...li]);
+  }
+
+  useEffect(() => {
+    catd();
+  }, []);
 
   return (
     <div>
@@ -30,22 +40,29 @@ function App() {
           <Box sx={{ display: "flex", justifyContent: "space-evenly", paddingX: "90px" }}>
             <img width="150px" src='https://queenschamber.glueup.com/resources/public/images/logo/400x200/5c72c188-a33d-4872-8e0d-f7587caf4277.png' />
             {/* <TextField  /> */}
-            <TextField color='warning' variant='outlined' fullWidth placeholder="Serach" sx={{ marginLeft: "30px" }} value={Txt} onChange={(e) => {
+            <TextField color='warning' className='inp' variant='outlined' fullWidth placeholder="Serach" sx={{ marginLeft: "30px" }} value={Txt} onChange={(e) => {
               setTxt(e.target.value)
             }} />
 
           </Box>
-          <Box>
-            {datasearch.map((item,id)=>(
-              <Chip key={id} label={[...new Set(item.category)]} />
+          <Box sx={{ padding: "10px" }}>
+            {filteredlist.map((item, id) => (
+              <ToggleButtonGroup>
+                <ToggleButton key={id} value={item} onClick={(e) => {
+                  setTxt(e.target.value)
+                }} sx={{ marginX: "10px",backgroundColor:"orange",color:"white",borderRadius:"15px" }} >
+                  {item}
+                </ToggleButton>
+              </ToggleButtonGroup>
             ))}
+
           </Box>
         </AppBar>
       </div>
 
 
       <div>
-        <Box sx={{ flexGrow: 1, padding: "30px",marginTop:"200px"}}>
+        <Box sx={{ flexGrow: 1, padding: "30px", marginTop: "230px" }}>
           <Grid container spacing={{ xs: 2, md: 2 }} columns={{ xs: 4, sm: 8, md: 16 }}>
 
             {datasearch.map((item, index) => (
