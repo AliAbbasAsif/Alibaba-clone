@@ -1,5 +1,5 @@
 import './App.css';
-import { AppBar, Card, CardContent, CardMedia, Chip, Grid, TextField, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
+import { AppBar, Card, CardContent, CardMedia, Chip, FormControl, Grid, MenuItem, OutlinedInput, Select, TextField, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { useEffect, useState } from 'react';
 import Data from './carddata';
@@ -29,6 +29,11 @@ function App() {
     catd();
   }, []);
 
+  const [formats, setFormats] = useState(() => ['bold', 'italic']);
+
+  const handleFormat = (event, newFormats) => {
+    setFormats(newFormats);
+  }
   return (
     <div>
       <div>
@@ -40,21 +45,27 @@ function App() {
           <Box sx={{ display: "flex", justifyContent: "space-evenly", paddingX: "90px" }}>
             <img width="150px" src='https://queenschamber.glueup.com/resources/public/images/logo/400x200/5c72c188-a33d-4872-8e0d-f7587caf4277.png' />
             {/* <TextField  /> */}
-            <TextField color='warning' className='inp' variant='outlined' fullWidth placeholder="Serach" sx={{ marginLeft: "30px" }} value={Txt} onChange={(e) => {
-              setTxt(e.target.value)
-            }} />
+            <TextField color='warning' className='inp' variant='outlined' fullWidth placeholder="Serach" sx={{ marginLeft: "30px" }} 
+              onChange={(e) => {
+                setTxt(e.target.value)
+              }} />
 
           </Box>
           <Box sx={{ padding: "10px" }}>
             {filteredlist.map((item, id) => (
-              <ToggleButtonGroup>
-                <ToggleButton key={id} value={item} onClick={(e) => {
-                  setTxt(e.target.value)
-                }} sx={{ marginX: "10px",backgroundColor:"orange",color:"white",borderRadius:"15px" }} >
+              <ToggleButtonGroup
+                value={formats}
+                onChange={handleFormat}>
+                <ToggleButton key={id} value={item} sx={{ marginX: "10px", backgroundColor: "orange", color: "white", borderRadius: "15px" }}
+                  onClick={(e) => {
+                    setTxt(e.target.value)
+                  }}>
                   {item}
                 </ToggleButton>
               </ToggleButtonGroup>
             ))}
+
+
 
           </Box>
         </AppBar>
@@ -92,7 +103,7 @@ function App() {
           </Grid>
         </Box>
       </div>
-    </div>
+    </div >
   );
 }
 
